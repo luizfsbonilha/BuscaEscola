@@ -23,7 +23,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:ems="10"
         android:id="@+id/textNome"
         android:hint="Nome"
         android:layout_marginTop="20dp" />
@@ -32,7 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:ems="10"
         android:id="@+id/textEmail"
         android:hint="Email"
         android:layout_marginTop="20dp" />
@@ -40,8 +38,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:ems="10"
+        android:inputType="textPassword"
         android:id="@+id/textPassword"
         android:hint="Password"
         android:layout_marginTop="20dp" />
@@ -56,15 +53,6 @@
         android:hint="Confirmar Password"
         android:layout_marginTop="20dp" />
 
-    <Switch
-        android:text="Ativar Envio de E-mails"
-        android:layout_width="match_parent"
-        android:id="@+id/switchEnvioEmail"
-        android:textSize="18sp"
-        android:layout_marginTop="20dp"
-        android:layout_height="wrap_content"
-        android:splitTrack="false" />
-
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -72,13 +60,12 @@
         android:ems="10">
 
         <Button
-            android:text="confirmar"
+            android:text="cadastrar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btnConfirmar"
+            android:id="@+id/btnCadastrar"
             android:layout_weight="1"
-            android:layout_gravity="bottom"
-            android:onClick="validarCampos"/>
+            android:layout_gravity="bottom"/>
 
         <Button
             android:text="Cancelar"

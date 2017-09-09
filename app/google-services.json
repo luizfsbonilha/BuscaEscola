@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "176647650479",
+    "firebase_url": "https://busca-escola-23440.firebaseio.com",
+    "project_id": "busca-escola-23440",
+    "storage_bucket": "busca-escola-23440.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176647650479:android:f4cbe5a4f4454cf1",
+        "android_client_info": {
+          "package_name": "br.bonilha.buscaescola"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "176647650479-55l0tv0gk695r93muru450puecn78rac.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.bonilha.buscaescola",
+            "certificate_hash": "c8b08292772feeea67f0861fa47ea30be2e3b792"
+          }
+        },
+        {
+          "client_id": "176647650479-id67017tj1erm8glmk2gh6u5vm6m5qnq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApBZfkc7BegrNnS1FBLfXLNlXuecjUkKQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "176647650479-id67017tj1erm8glmk2gh6u5vm6m5qnq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

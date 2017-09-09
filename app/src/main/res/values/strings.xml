@@ -6,4 +6,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="facebook_app_id">729567830576830</string>
+    <string name="fb_login_protocol_scheme">fb729567830576830</string>
 </resources>
