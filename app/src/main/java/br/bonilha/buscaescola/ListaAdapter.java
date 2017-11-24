@@ -8,14 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ListaAdapter extends RecyclerView.Adapter<ListaAdapter.ListaViewHolder> {
 
     private Context context;
-    private ArrayList<Escola> modelo;
+    private List<Escola> modelo;
 
-    public ListaAdapter(Context context, ArrayList<Escola> modelo) {
+    public ListaAdapter(Context context, List<Escola> modelo) {
         this.context = context;
         this.modelo = modelo;
     }
@@ -33,6 +33,7 @@ public class ListaAdapter extends RecyclerView.Adapter<ListaAdapter.ListaViewHol
         holder.rede.setText(modelo.get(i).getRede());
 
     }
+
     @Override
     public int getItemCount() {
         return modelo.size();
@@ -41,12 +42,11 @@ public class ListaAdapter extends RecyclerView.Adapter<ListaAdapter.ListaViewHol
 
     public class ListaViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView nome,rede;
+        private TextView nome, rede;
 
         public ListaViewHolder(View view) {
             super(view);
 
-            // avatar = (ImageView) v.findViewById(R.id.imgAvatar);
             nome = (TextView) view.findViewById(R.id.txtNome);
             rede = (TextView) view.findViewById(R.id.txtRede);
 

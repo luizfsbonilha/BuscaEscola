@@ -6,6 +6,7 @@
     <user-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <user-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <user-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <user-permission android:name="READ_EXTERNAL_STORAGE" />
     <user-permission android:name="WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -55,6 +56,9 @@
             android:label="@string/title_activity_maps" />
 
         <application android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity android:name=".EditarPerfilActivity" />
+        <activity android:name=".LogadoActivity"></activity>
 
     </application>
 
