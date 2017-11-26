@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -55,9 +56,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.addMarker(new MarkerOptions().position(es).title(escola.getNome()));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(es, 15));
         } else {
-            LatLng iesbSul = new LatLng(-15.7571194, -47.8788442);
-            mMap.addMarker(new MarkerOptions().position(iesbSul).title("IESB Sul"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(iesbSul, 15));
+            Toast.makeText(MapsActivity.this, "Localização não encontrada !", Toast.LENGTH_LONG).show();
+
         }
 
     }
