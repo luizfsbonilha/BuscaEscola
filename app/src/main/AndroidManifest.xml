@@ -6,8 +6,11 @@
     <user-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <user-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <user-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <user-permission android:name="READ_EXTERNAL_STORAGE" />
     <user-permission android:name="WRITE_EXTERNAL_STORAGE" />
+    <user-permission android:name="READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -59,7 +62,6 @@
 
         <activity android:name=".EditarPerfilActivity" />
         <activity android:name=".LogadoActivity"></activity>
-
     </application>
 
 </manifest>

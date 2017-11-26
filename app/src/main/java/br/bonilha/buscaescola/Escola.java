@@ -1,10 +1,14 @@
 package br.bonilha.buscaescola;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 /**
  * Created by Luiz Fernando on 21/11/2017.
  */
 
-public class Escola {
+public class Escola implements Serializable{
     private String nome;
     private String rede;
     private String municipio;
@@ -12,6 +16,34 @@ public class Escola {
     private String situacaoFuncionamento;
     private String categoriaEscolaPrivada;
     private String esferaAdministrativa;
+    private double latitude;
+    private double longitude;
+
+    public Escola(){
+
+    }
+
+    public Escola(String nome, String rede, Double latitude, Double longitude){
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 
     public String getNome() {
         return nome;

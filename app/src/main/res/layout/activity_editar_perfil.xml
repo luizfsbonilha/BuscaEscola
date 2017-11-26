@@ -7,7 +7,7 @@
     tools:context="br.bonilha.buscaescola.EditarPerfilActivity">
 
     <ImageView
-        android:id="@+id/pharma"
+        android:id="@+id/escola"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
