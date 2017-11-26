@@ -13,6 +13,7 @@
     tools:context="br.bonilha.buscaescola.MainActivity">
 
     <SearchView
+        android:id="@+id/barra_busca"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -21,19 +22,5 @@
         android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnSair"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sair"
-            android:onClick="disconnectUser"/>
-    </LinearLayout>
 
 </LinearLayout>

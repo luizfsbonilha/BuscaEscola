@@ -1,5 +1,6 @@
 package br.bonilha.buscaescola;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -19,17 +20,31 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import br.bonilha.buscaescola.MyGlideModule;
+import br.bonilha.buscaescola.ImageProvider;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 
 public class EditarPerfilActivity extends AppCompatActivity {
+
     public static final String CAMERA_PERMISSION = android.Manifest.permission.CAMERA;
     public static final String READ_EXTERNAL_STORAGE_PERMISSION = android.Manifest.permission.READ_EXTERNAL_STORAGE;
     public static final String WRITE_EXTERNAL_STORAGE_PERMISSION = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -42,26 +57,55 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
     private Uri pictureUri;
     private String photoPath;
+    Bitmap bitmap;
     String photoBase64;
-    EditText txtUsuario;
-    EditText txtTelefone;
+
+    EditText textNome;
+    EditText textSobrenome;
+    EditText textEmail;
+    EditText textTel;
     ImageView btnCamera;
 
     DatabaseReference mDb = FirebaseDatabase.getInstance().getReference();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    StorageReference storageRef = FirebaseStorage.getInstance().getReference().child(user.getUid());
+    ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
 
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Aguarde");
 
-        txtTelefone = (EditText) findViewById(R.id.telefone);
-        txtUsuario = (EditText) findViewById(R.id.nomeUsuario);
+        textNome = (EditText) findViewById(R.id.textNome);
+        textSobrenome = (EditText) findViewById(R.id.textSobrenome);
+        textEmail = (EditText) findViewById(R.id.textEmail);
+        textTel = (EditText) findViewById(R.id.tel);
 
         if (user != null) {
-            txtTelefone.setText(user.getEmail());
-            txtUsuario.setText(user.getDisplayName());
+            mProgressDialog.show();
+            mDb.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    mProgressDialog.dismiss();
+                    HashMap<String, String> valores = (HashMap<String, String>) dataSnapshot.child(user.getUid()).getValue();
+                    if (valores != null && !valores.isEmpty()) {
+                        textNome.setText(valores.get("nome"));
+                        textSobrenome.setText(valores.get("sobrenome"));
+                        textEmail.setText(valores.get("email"));
+                        textTel.setText(valores.get("telefone"));
+                        GlideApp.with(getApplicationContext()).load(valores.get("avatar")).into(btnCamera);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
 
         btnCamera = (ImageView) findViewById(R.id.cam);
@@ -75,24 +119,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
             }
         });
 
-        btnSalvar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (txtTelefone.getText() != null && txtTelefone.getText().toString().equals("")) {
-                    Toast.makeText(EditarPerfilActivity.this, "Nome Inválido!", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if (txtUsuario.getText() != null && txtUsuario.getText().toString().equals("")) {
-                    Toast.makeText(EditarPerfilActivity.this, "Sobrenome Inválido!", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                mDb.child(user.getUid()).child("nome").setValue(txtUsuario.getText().toString());
-                mDb.child(user.getUid()).child("telefone").setValue(txtTelefone.getText().toString());
-                mDb.child(user.getUid()).child("foto").setValue(photoBase64);
-                Intent it = new Intent(EditarPerfilActivity.this, LogadoActivity.class);
-                startActivity(it);
-            }
-        });
+        btnSalvar.setOnClickListener(getSalvarListener());
 
         btnCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +128,61 @@ public class EditarPerfilActivity extends AppCompatActivity {
                 startActivity(it);
             }
         });
+    }
+
+    @NonNull
+    private View.OnClickListener getSalvarListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (textEmail.getText() != null && textEmail.getText().toString().equals("")) {
+                    Toast.makeText(EditarPerfilActivity.this, "Email Inválido!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (textNome.getText() != null && textNome.getText().toString().equals("")) {
+                    Toast.makeText(EditarPerfilActivity.this, "Nome Inválido!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if (textSobrenome.getText() != null && textSobrenome.getText().toString().equals("")) {
+                    Toast.makeText(EditarPerfilActivity.this, "Sobrenome Inválido!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (textTel.getText() != null && textTel.getText().toString().equals("")) {
+                    Toast.makeText(EditarPerfilActivity.this, "Telefone Inválido!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                mProgressDialog.show();
+                mDb.child(user.getUid()).child("nome").setValue(textNome.getText().toString());
+                mDb.child(user.getUid()).child("sobrenome").setValue(textSobrenome.getText().toString());
+                mDb.child(user.getUid()).child("email").setValue(textEmail.getText().toString());
+                mDb.child(user.getUid()).child("telefone").setValue(textTel.getText().toString());
+
+                if (bitmap != null) {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] data = baos.toByteArray();
+                    UploadTask uploadTask = storageRef.putBytes(data);
+                    uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            Uri downloadUrl = task.getResult().getDownloadUrl();
+                            mDb.child(user.getUid()).child("avatar").setValue(downloadUrl.toString());
+                            mProgressDialog.dismiss();
+                            Intent it = new Intent(EditarPerfilActivity.this, LogadoActivity.class);
+                            startActivity(it);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            mProgressDialog.dismiss();
+                            Toast.makeText(EditarPerfilActivity.this, "Ocorreu um erro ao fazer upload da foto.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        };
     }
 
     private void openCamera() {
@@ -116,7 +198,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
             }
 
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this, "com.fpharma.findpharma.fileprovider", photoFile);
+                Uri photoURI = FileProvider.getUriForFile(this, "br.bonilha.buscaescola.fileprovider", photoFile);
                 pictureUri = photoURI;
                 photoPath = photoFile.getAbsolutePath();
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
@@ -140,9 +222,10 @@ public class EditarPerfilActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == CAMERA_REQUEST_CODE) {
-                photoBase64 = encodeImage(photoPath);
-                Uri uri = ImageProvider.getInstance().getImageUri(this, photoPath);
-                btnCamera.setImageURI(uri);
+//                photoBase64 = encodeImage(photoPath);
+//                Uri uri = ImageProvider.getInstance().getImageUri(this, photoPath);
+                bitmap = ImageProvider.getInstance().resizeRotatePicture(photoPath);
+                btnCamera.setImageBitmap(bitmap);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -153,7 +236,6 @@ public class EditarPerfilActivity extends AppCompatActivity {
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             openCamera();
         }
-
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
@@ -175,5 +257,5 @@ public class EditarPerfilActivity extends AppCompatActivity {
         return encImage;
 
     }
-
 }
+

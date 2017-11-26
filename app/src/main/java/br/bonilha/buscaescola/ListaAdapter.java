@@ -33,6 +33,7 @@ public class ListaAdapter extends RecyclerView.Adapter<ListaAdapter.ListaViewHol
         Escola escola = modelo.get(i);
         holder.nome.setText(modelo.get(i).getNome());
         holder.rede.setText(modelo.get(i).getRede());
+        holder.municipio.setText(modelo.get(i).getMunicipio());
         holder.setEscola(escola);
 
 
@@ -47,7 +48,7 @@ public class ListaAdapter extends RecyclerView.Adapter<ListaAdapter.ListaViewHol
     public class ListaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public View layout;
-        private TextView nome, rede;
+        private TextView nome, rede, municipio;
         private Double latitude,longitude;
         private Context context;
         private Escola escola;
@@ -59,6 +60,8 @@ public class ListaAdapter extends RecyclerView.Adapter<ListaAdapter.ListaViewHol
 
             nome = (TextView) view.findViewById(R.id.txtNome);
             rede = (TextView) view.findViewById(R.id.txtRede);
+            municipio = (TextView) view.findViewById(R.id.txtMunicipio);
+
             this.context = context;
         }
         public void setEscola(Escola escola) {

@@ -24,7 +24,7 @@
             android:id="@+id/txtNome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="NOME DO INFELIZ"
+            android:text="Nome da Escola"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -32,7 +32,14 @@
             android:id="@+id/txtRede"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="EMAIL@DO.INFELIZ"
+            android:text="Rede de ensino"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/txtMunicipio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="municipio"
             android:textSize="16sp" />
     </LinearLayout>
 
